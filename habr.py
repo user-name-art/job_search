@@ -9,7 +9,7 @@ def get_html(url):
         return result.text
     except(requests.RequestException, ValueError):
         print('Network error.')
-        return False
+        return False 
 
 def get_habr_vacancies(html):
     soup = BeautifulSoup(html, 'html.parser')
