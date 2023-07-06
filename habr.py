@@ -31,7 +31,7 @@ def get_habr_vacancies(html):
         
         result_vacancies.append({
             'company': company,
-            'title': title,
+            'vacancy_title': title,
             'url': url,
             'published': published
         })  
@@ -40,11 +40,8 @@ def get_habr_vacancies(html):
 
 
 def save_data_to_db(all_vacancies):
-    for vacancy in all_vacancies:
-        entity = Vacancy(company=vacancy['company'], vacancy_title=vacancy['title'], 
-                        url=vacancy['url'], published=vacancy['published'])
-        db_session.add(entity)
-        db_session.commit()
+    db_session.bulk_insert_mappings(Vacancy, all_vacancies)
+    db_session.commit()
 
 
 if __name__ == '__main__':
