@@ -8,7 +8,7 @@ class Vacancy(Base):
     id = Column(Integer, primary_key=True)
     company = Column(String)
     vacancy_title = Column(String)
-    url = Column(String)
+    url = Column(String, unique=True)
     published = Column(Date)
 
     def __repr__(self):
