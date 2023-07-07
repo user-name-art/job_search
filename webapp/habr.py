@@ -38,26 +38,34 @@ def get_habr_vacancies(html):
             'url': url,
             'published': published
         })  
-    
     return result_vacancies
 
 
 def save_data_to_db(all_vacancies):
     for vacancy in all_vacancies:
-        try:
+        vacancy_exists = Vacancy.query.filter(Vacancy.url == vacancy['url']).count()
+        
+        if not vacancy_exists:
             entity = Vacancy(company=vacancy['company'], vacancy_title=vacancy['vacancy_title'], 
                         url=vacancy['url'], published=vacancy['published'])
             db_session.add(entity)
             db_session.commit()
-            print(vacancy)
-        except (PendingRollbackError, IntegrityError):
-            print(f"Вакансия {vacancy['company']} {vacancy['vacancy_title']} уже есть в базе.")
+            print(f"Вакансия {vacancy['vacancy_title']} компании {vacancy['company']} добавлена.")
+        else:
+            print(f"Вакансия {vacancy['vacancy_title']} компании {vacancy['company']} уже есть в базе.")
     
 
 if __name__ == '__main__':
     load_dotenv()
-    habr_url = os.environ.get('HABR_URL')
-    html = get_html(habr_url)
+    habr_url_junior = os.environ.get('HABR_URL_JUNIOR')
+    habr_url_intern = os.environ.get('HABR_URL_INTERN')
+
+    html = get_html(habr_url_junior)
+    if html:
+        vacancies = get_habr_vacancies(html)
+        save_data_to_db(vacancies)
+
+    html = get_html(habr_url_intern)
     if html:
         vacancies = get_habr_vacancies(html)
         save_data_to_db(vacancies)
