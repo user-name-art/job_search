@@ -1,7 +1,9 @@
 import requests
 import time
+import os
 
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 
 from models import Vacancy
 from db import db_session
@@ -45,7 +47,9 @@ def save_data_to_db(all_vacancies):
 
 
 if __name__ == '__main__':
-    html = get_html('https://career.habr.com/vacancies?qid=3&s[]=2&s[]=82&s[]=72&s[]=1&s[]=106&skills[]=446&type=all')
+    load_dotenv()
+    habr_url = os.environ.get('HABR_URL')
+    html = get_html(habr_url)
     if html:
         vacancies = get_habr_vacancies(html)
         print(vacancies)
