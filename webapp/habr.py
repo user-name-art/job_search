@@ -4,6 +4,7 @@ import os
 
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
+from sqlalchemy.exc import PendingRollbackError, IntegrityError
 
 from models import Vacancy
 from db import db_session
@@ -42,9 +43,16 @@ def get_habr_vacancies(html):
 
 
 def save_data_to_db(all_vacancies):
-    db_session.bulk_insert_mappings(Vacancy, all_vacancies)
-    db_session.commit()
-
+    for vacancy in all_vacancies:
+        try:
+            entity = Vacancy(company=vacancy['company'], vacancy_title=vacancy['vacancy_title'], 
+                        url=vacancy['url'], published=vacancy['published'])
+            db_session.add(entity)
+            db_session.commit()
+            print(vacancy)
+        except (PendingRollbackError, IntegrityError):
+            print(f"Вакансия {vacancy['company']} {vacancy['vacancy_title']} уже есть в базе.")
+    
 
 if __name__ == '__main__':
     load_dotenv()
@@ -52,5 +60,5 @@ if __name__ == '__main__':
     html = get_html(habr_url)
     if html:
         vacancies = get_habr_vacancies(html)
-        print(vacancies)
         save_data_to_db(vacancies)
+        
