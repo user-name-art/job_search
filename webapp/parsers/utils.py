@@ -3,9 +3,7 @@ import sys
 sys.path.append(os.getcwd())
 
 import requests
-import time
 
-from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 from webapp.models import Vacancy
