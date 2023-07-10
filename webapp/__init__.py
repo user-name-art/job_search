@@ -13,6 +13,7 @@ def create_app():
     @app.route('/')
     def index():
         title = 'Вакансии python.'
-        return render_template('index.html', page_title=title)
+        all_vacancies = Vacancy.query.order_by(Vacancy.published.desc()).all()
+        return render_template('index.html', page_title=title, all_vacancies=all_vacancies)
 
     return app
