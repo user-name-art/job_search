@@ -40,6 +40,9 @@ def get_habr_vacancies(html):
             'url': url,
             'published': published
         })  
+
+    save_data_to_db(result_vacancies)
+    
     return result_vacancies
 
 
@@ -65,10 +68,8 @@ if __name__ == '__main__':
     html = get_html(habr_url_junior)
     if html:
         vacancies = get_habr_vacancies(html)
-        save_data_to_db(vacancies)
 
     html = get_html(habr_url_intern)
     if html:
         vacancies = get_habr_vacancies(html)
-        save_data_to_db(vacancies)
         
