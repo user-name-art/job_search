@@ -1,9 +1,13 @@
-from sqlalchemy import Column, Integer, String, Date
-from db import Base, engine
+import os
+import sys
+sys.path.append(os.getcwd())
 
+from sqlalchemy import Column, Integer, String, Date
+from webapp.db import Base, engine
 
 class Vacancy(Base):
     __tablename__ = 'vacancies'
+    __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True)
     company = Column(String)

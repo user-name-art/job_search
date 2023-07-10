@@ -1,13 +1,15 @@
+import os
+import sys
+sys.path.append(os.getcwd())
+
 import requests
 import time
-import os
 
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from sqlalchemy.exc import PendingRollbackError, IntegrityError
 
-from models import Vacancy
-from db import db_session
+from webapp.models import Vacancy
+from webapp.db import db_session
 
 
 def get_html(url):
@@ -15,7 +17,7 @@ def get_html(url):
         result = requests.get(url)
         result.raise_for_status()
         return result.text
-    except(requests.RequestException, ValueError):
+    except(requests.RequestException):
         print('Network error.')
         return False
 
