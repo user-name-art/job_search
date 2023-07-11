@@ -13,7 +13,9 @@ def create_app():
     @app.route('/')
     def index():
         title = 'Вакансии python.'
-        all_vacancies = Vacancy.query.order_by(Vacancy.published.desc()).all()
-        return render_template('index.html', page_title=title, all_vacancies=all_vacancies)
+        active_vacancies = Vacancy.query.filter(Vacancy.active == True).order_by(Vacancy.published.desc()).all()
+        archive_vacancies = Vacancy.query.filter(Vacancy.active == False).order_by(Vacancy.published.desc()).all()
+        return render_template('index.html', page_title=title, 
+                            active_vacancies=active_vacancies, archive_vacancies=archive_vacancies)
 
     return app
