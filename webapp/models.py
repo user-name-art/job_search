@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.append(os.getcwd())
 
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, String, Date, Boolean
 from webapp.db import Base, engine
 
 class Vacancy(Base):
@@ -14,6 +14,8 @@ class Vacancy(Base):
     vacancy_title = Column(String)
     url = Column(String, unique=True)
     published = Column(Date)
+    active = Column(Boolean)
+    source = Column(String)
 
     def __repr__(self):
         return f'Vacancy {self.id}, {self.company}, {self.vacancy_title}'

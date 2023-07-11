@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 from webapp.models import Vacancy
 from webapp.db import db_session
-from webapp.parsers.utils import save_data_to_db, get_html
+from webapp.parsers.utils import save_data_to_db, get_html, switch_active
 
 
 def get_habr_vacancies(html):
@@ -29,7 +29,8 @@ def get_habr_vacancies(html):
             'company': company,
             'vacancy_title': title,
             'url': url,
-            'published': published
+            'published': published,
+            'source_url': 'habr',
         })  
 
     save_data_to_db(result_vacancies)
@@ -39,6 +40,9 @@ def get_habr_vacancies(html):
 
 if __name__ == '__main__':
     load_dotenv()
+    
+    switch_active('habr')
+
     habr_url_junior = os.environ.get('HABR_URL_JUNIOR')
     habr_url_intern = os.environ.get('HABR_URL_INTERN')
 

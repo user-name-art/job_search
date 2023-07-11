@@ -8,12 +8,12 @@ import requests
 
 from webapp.models import Vacancy
 from webapp.db import db_session
-from webapp.parsers.utils import save_data_to_db
+from webapp.parsers.utils import save_data_to_db, switch_active
 
 
-def get_data(url):
+def get_data(source_url):
     try:
-        response = requests.get(url, params=None)
+        response = requests.get(source_url, params=None)
         all_vacancies = response.json()['items']
     except(requests.RequestException):
         print('Network error.')
@@ -31,7 +31,8 @@ def get_data(url):
             'company': company,
             'vacancy_title': title,
             'url': url,
-            'published': published
+            'published': published,
+            'source_url': 'hh',
         })  
 
     save_data_to_db(result_vacancies)
@@ -40,6 +41,8 @@ def get_data(url):
 
 if __name__ == '__main__':
     load_dotenv()
+
+    switch_active('hh')
 
     hh_url_intern = os.environ.get('HH_URL_INTERN')
     get_data(hh_url_intern)
