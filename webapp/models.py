@@ -5,6 +5,7 @@ sys.path.append(os.getcwd())
 from sqlalchemy import Column, Integer, String, Date, Boolean
 from webapp.db import Base, engine
 
+
 class Vacancy(Base):
     __tablename__ = 'vacancies'
     __table_args__ = {'extend_existing': True}
@@ -19,6 +20,7 @@ class Vacancy(Base):
 
     def __repr__(self):
         return f'Vacancy {self.id}, {self.company}, {self.vacancy_title}'
+
 
 if __name__ == '__main__':
     Base.metadata.create_all(bind=engine)

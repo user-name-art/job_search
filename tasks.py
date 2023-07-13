@@ -10,6 +10,7 @@ from webapp.parsers.hh import get_data
 
 celery_app = Celery('tasks', broker='redis://localhost:6379/0')
 
+
 @celery_app.task
 def habr_vacancies():
     switch_active('habr')
@@ -17,12 +18,12 @@ def habr_vacancies():
     habr_url_junior = os.environ.get('HABR_URL_JUNIOR')
     html = get_html(habr_url_junior)
     if html:
-        vacancies = get_habr_vacancies(html)
+        get_habr_vacancies(html)
 
     habr_url_intern = os.environ.get('HABR_URL_INTERN')
     html = get_html(habr_url_intern)
     if html:
-        vacancies = get_habr_vacancies(html)
+        get_habr_vacancies(html)
 
 
 @celery_app.task

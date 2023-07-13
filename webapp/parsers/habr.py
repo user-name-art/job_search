@@ -1,15 +1,10 @@
+from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+
 import os
 import sys
 sys.path.append(os.getcwd())
 
-import requests
-import time
-
-from bs4 import BeautifulSoup
-from dotenv import load_dotenv
-
-from webapp.models import Vacancy
-from webapp.db import db_session
 from webapp.parsers.utils import save_data_to_db, get_html, switch_active
 
 
@@ -24,23 +19,23 @@ def get_habr_vacancies(html):
         title = vacancy.find('a', class_='vacancy-card__title-link').text
         url = f"https://career.habr.com{vacancy.find('a', class_='vacancy-card__title-link')['href']}"
         published = vacancy.find('time')['datetime'].split('T')[0]
-        
+
         result_vacancies.append({
             'company': company,
             'vacancy_title': title,
             'url': url,
             'published': published,
             'source_url': 'habr',
-        })  
+        })
 
     save_data_to_db(result_vacancies)
-    
+
     return result_vacancies
-    
+
 
 if __name__ == '__main__':
     load_dotenv()
-    
+
     switch_active('habr')
 
     habr_url_junior = os.environ.get('HABR_URL_JUNIOR')
@@ -53,4 +48,3 @@ if __name__ == '__main__':
     html = get_html(habr_url_intern)
     if html:
         vacancies = get_habr_vacancies(html)
-        
