@@ -1,13 +1,12 @@
 import os
 import sys
-sys.path.append(os.getcwd())
 
 from dotenv import load_dotenv
 
 import requests
 
-from webapp.models import Vacancy
-from webapp.db import db_session
+sys.path.append(os.getcwd())
+
 from webapp.parsers.utils import save_data_to_db, switch_active
 
 
@@ -15,7 +14,7 @@ def get_data(source_url):
     try:
         response = requests.get(source_url, params=None)
         all_vacancies = response.json()['items']
-    except(requests.RequestException):
+    except (requests.RequestException):
         print('Network error.')
         return False
 
@@ -33,11 +32,12 @@ def get_data(source_url):
             'url': url,
             'published': published,
             'source_url': 'hh',
-        })  
+        })
 
     save_data_to_db(result_vacancies)
-    
+
     return result_vacancies
+
 
 if __name__ == '__main__':
     load_dotenv()

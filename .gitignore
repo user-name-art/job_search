@@ -130,3 +130,5 @@ dmypy.json
 
 *.csv
 *.html
+.vscode/
+.flake8
