@@ -11,6 +11,9 @@ from webapp.parsers.utils import save_data_to_db, switch_active
 
 
 def get_data(source_url):
+    """Функция получает данные по API hh.ru.
+    Парамерты указаны в source_url, который берем из .env файла.
+    """
     try:
         response = requests.get(source_url, params=None)
         all_vacancies = response.json()['items']

@@ -5,6 +5,8 @@ from webapp.db import db_session
 
 
 def get_html(url):
+    """Функция получает html веб-страницы с указанным url.
+    """
     try:
         result = requests.get(url)
         result.raise_for_status()
@@ -15,6 +17,12 @@ def get_html(url):
 
 
 def save_data_to_db(all_vacancies):
+    """Функция сохраняет полученные данные в подключенную к сервису БД.
+    Все новые вакансии по умолчанию помечаются как активные.
+    Если вакансия ранее уже была добавлена в базу и она есть в полученном запросе,
+    она также помечается как активная.
+    На входе all_vacancies - это список словарей.
+    """
     for vacancy in all_vacancies:
         vacancy_exists = Vacancy.query.filter(Vacancy.url == vacancy['url']).count()
 
@@ -36,6 +44,9 @@ def save_data_to_db(all_vacancies):
 
 
 def switch_active(source_url):
+    """Переключает значение активности вакансии в False.
+    Запускается каджый раз перед получением новых данных, чтобы пометить неактивные вакансии.
+    """
     vacancies_by_source = Vacancy.query.filter(Vacancy.source == source_url).all()
     for vacancy in vacancies_by_source:
         vacancy.active = False
