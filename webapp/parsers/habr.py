@@ -9,6 +9,9 @@ from webapp.parsers.utils import save_data_to_db, get_html, switch_active
 
 
 def get_habr_vacancies(html):
+    """Функция парсит нужные данные по каждой вакансии и сохраняет их в БД с помощью save_data_to_db.
+    В save_data_to_db передается список словарей.
+    """
     soup = BeautifulSoup(html, 'html.parser')
     all_vacancies = soup.find('div', class_='section-group section-group--gap-medium')
     all_vacancies = all_vacancies.findAll('div', class_='vacancy-card__inner')
